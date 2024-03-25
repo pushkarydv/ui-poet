@@ -14,11 +14,18 @@ function waitForInput(userViewPrompt) {
     });
 }
 
+// get input form the command line while showingn the userViewPrompt (anything like: What is your name?) to user.
 const getCommandLineInput = async (userViewPrompt) => {
     const prompt = await waitForInput(userViewPrompt);
     return prompt;
 }
 
+// making console outputs colorful
+const logger = (text) => {
+    console.log(`\x1b[33m${text}\x1b[0m`);
+}
+
 module.exports = {
-    getCommandLineInput
+    getCommandLineInput,
+    logger
 }
