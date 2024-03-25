@@ -1,21 +1,14 @@
-const readline = require('node:readline');
+/*
+    * UI-POET
+    * 🧑‍💻: Pushkar Yadav (https://github.com/pushkarydv)
+    * Description: This is base version which is expected to get the prompt from user, search on web, get some inspirations, learn differnt frameworks, and generate code.
+    * Date: 2024-02-24
+*/
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-function waitForInput() {
-    return new Promise((resolve, reject) => {
-        rl.question('Prompt : ', (input) => {
-            resolve(input);
-            rl.close();
-        });
-    });
-}
+const { getCommandLineInput } = require("./src/utils/commandLine");
 
 async function main() {
-    const prompt = await waitForInput();
+    const prompt = await getCommandLineInput('Enter your prompt');
     if(!prompt) {
        console.log('No prompt provided');
        process.exit(1);
