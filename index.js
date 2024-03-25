@@ -10,6 +10,7 @@ require('dotenv').config();
 
 const Groq = require("groq-sdk");
 const OpenAI = require("openai");
+const Anthropic = require('@anthropic-ai/sdk');
 
 const { exec } = require('child_process');
 
@@ -21,6 +22,7 @@ const { getCommandLineInput, logger } = require("./src/utils/commandLine");
 const { getInspirationalImages } = require("./src/services/getInspirations");
 const { fileToGenerativePart } = require("./src/services/fileToGenerativePart");
 const { UI_OBSERVER_PROMPT, CODE_GENERATOR_PROMPT } = require("./src/services/prompts");
+const { log } = require('console');
 
 async function main() {
 
@@ -67,28 +69,42 @@ async function main() {
     const codeUserPrompt = CODE_GENERATOR_PROMPT(task, ANALYSIS_MESSAGE);
 
     /* AI MODEL TO GENERATE CODE (CAN BE REPLACED WITH ANY) */
-    const groqCloud = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const completion = await groqCloud.chat.completions.create({
-        messages: [
-            {
-                role: 'user',
-                content: codeUserPrompt,
-            },
-        ],
-        model: 'mixtral-8x7b-32768',
-    });
+
+
+    // const groqCloud = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    // const completion = await groqCloud.chat.completions.create({
+    //     messages: [
+    //         {
+    //             role: 'user',
+    //             content: codeUserPrompt,
+    //         },
+    //     ],
+    //     model: 'mixtral-8x7b-32768',
+    // });
+    // const generatedCode = await completion.choices[0]?.message?.content || '';
+
 
     // const openai = new OpenAI({
     //     apiKey: process.env.OPENAI_API_KEY,
     // });
-
     // const completion = await openai.chat.completions.create({
     //     messages: [{ role: 'user', content: codeUserPrompt }],
     //     model: 'gpt-4-turbo-preview',
     // });
+    // const generatedCode = await completion.choices[0]?.message?.content || '';
 
- 
-    const generatedCode = await completion.choices[0]?.message?.content || '';
+    const anthropic = new Anthropic({
+        apiKey: process.env['ANTHROPIC_API_KEY'],
+    });
+    const message = await anthropic.messages.create({
+        max_tokens: 4096,
+        messages: [{ role: 'user', content: codeUserPrompt }],
+        model: 'claude-3-opus-20240229',
+    });
+
+    const generatedCode = message.content[0].text;
+    console.log(generatedCode);
+
 
     if (!generatedCode) {
         logger(`Failed to generate code`);
