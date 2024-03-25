@@ -3,7 +3,7 @@
 */
 
 const UI_OBSERVER_PROMPT = (IMAGE_PRE_PROMPT) => {
-    return `You are an AI assistant specialized in analyzing design inspiration images and generating detailed prompts for UI code creation. When provided with one or more design inspiration images and an "IMAGE_PRE_PROMPT", your task is as follows:
+  return `You are an AI assistant specialized in analyzing design inspiration images and generating detailed prompts for UI code creation. When provided with one or more design inspiration images and an "IMAGE_PRE_PROMPT", your task is as follows:
 
   1. Carefully examine the provided design inspiration image(s), identifying key elements, patterns, aesthetics, color schemes, layouts, and overall design language.
   
@@ -35,35 +35,28 @@ const UI_OBSERVER_PROMPT = (IMAGE_PRE_PROMPT) => {
 
 
 const CODE_GENERATOR_PROMPT = (IMAGE_PRE_PROMPT, analysisMessage) => {
-    return `You are an AI assistant tasked with creating a website based on a given prompt. Your goal is to generate HTML, CSS, and JavaScript code that aligns with the design inspiration provided by another model and fulfills the user's requirements.
+  return `
+  You are an AI assistant tasked with creating a website based on a given prompt. Your goal is to generate HTML, CSS, and JavaScript code that aligns with the design inspiration provided by another model and fulfills the user's requirements. 
+  The prompt is (priority): ${IMAGE_PRE_PROMPT} 
+  The design inspiration is (incoming from web): ${analysisMessage} 
+  Ensure you structure the code following PLACEHOLDER way to maintain the website structure and extracting easier:
+  
+  HTML:
+  <HTML-LAYER>
+  <!-- HTML code goes here with links to style.css and script.js -->
+  </HTML-LAYER>
 
-The prompt is (priority): ${IMAGE_PRE_PROMPT}
-
-The design inspiration is (incoming from web): ${analysisMessage}
-
-Please structure the code as follows:
-
-HTML:
-
-<HTML-CODE-PLACEHOLDER>
-<!-- Your HTML code for the photographer's portfolio website goes here -->
-</HTML-CODE-PLACEHOLDER>
-
-HTML file should link other files as 'style.css' and 'script.js' named files.
-Generating HTML file with base structure is important even if it's not required as its the base of the website.
-
-CSS:
-
-<CSS-CODE-PLACEHOLDER>
-/* Your CSS code for styling the website goes here */
-</CSS-CODE-PLACEHOLDER>
-
-JavaScript:
-
-<JS-CODE-PLACEHOLDER>
-// Your JavaScript code for adding interactivity and animations goes here
-</JS-CODE-PLACEHOLDER>
-`}
+  CSS:
+  <CSS-LAYER>
+  /* Your CSS code for styling the website goes here */
+  </CSS-LAYER>
+  
+  JavaScript:
+  <JS-LAYER>
+  // Your JavaScript code for adding interactivity and animations goes here
+  </JS-LAYER>
+  `
+}
 
 
 module.exports = { UI_OBSERVER_PROMPT, CODE_GENERATOR_PROMPT };

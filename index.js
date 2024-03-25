@@ -9,6 +9,8 @@
 require('dotenv').config();
 
 const Groq = require("groq-sdk");
+const OpenAI = require("openai");
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const { makeFile } = require('./src/utils/filesystem');
@@ -19,7 +21,7 @@ const { fileToGenerativePart } = require("./src/services/fileToGenerativePart");
 const { UI_OBSERVER_PROMPT, CODE_GENERATOR_PROMPT } = require("./src/services/prompts");
 
 async function main() {
-    
+
     logger(`
     UI-POET
     Developed by Pushkar Yadav (https://github.com/pushkarydv)
@@ -59,31 +61,50 @@ async function main() {
     const ANALYSIS_MESSAGE = filterText(text, 'ANALYSIS_MESSAGE');
 
     logger(`Analyzed, Starting to generate code`);
-    const groqCloud = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const codeUserPrompt = CODE_GENERATOR_PROMPT(task, ANALYSIS_MESSAGE);
-    const completion = await groqCloud.chat.completions.create({
-        messages: [
-            {
-                role: 'user',
-                content: codeUserPrompt,
-            },
-        ],
-        model: 'mixtral-8x7b-32768',
+    // const groqCloud = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    // const completion = await groqCloud.chat.completions.create({
+    //     messages: [
+    //         {
+    //             role: 'user',
+    //             content: codeUserPrompt,
+    //         },
+    //     ],
+    //     model: 'mixtral-8x7b-32768',
+    // });
+
+    const openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    const completion = await openai.chat.completions.create({
+        messages: [{ role: 'user', content: codeUserPrompt }],
+        model: 'gpt-4-turbo-preview',
     });
 
     const generatedCode = await completion.choices[0]?.message?.content || '';
-    
+
+    if (!generatedCode) {
+        logger(`Failed to generate code`);
+        process.exit(1);
+    }
+    console.log(generatedCode);
     logger(`Filtering Code`);
-    const _html = filterText(generatedCode, 'HTML-CODE-PLACEHOLDER');
-    const _css = filterText(generatedCode, 'CSS-CODE-PLACEHOLDER');
-    const _js = filterText(generatedCode, 'JS-CODE-PLACEHOLDER');
+    const _html = filterText(generatedCode, 'HTML-LAYER');
+    const _css = filterText(generatedCode, 'CSS-LAYER');
+    const _js = filterText(generatedCode, 'JS-LAYER');
 
     makeFile('./output/index.html', _html);
     makeFile('./output/style.css', _css);
     makeFile('./output/script.js', _js);
 
     logger(`Thanks for using UI-POET, your code has been generated and saved in output folder. \n\nHappy Coding!`);
-    process.exit(0);
+
 }
 
-main();
+try {
+    main();
+} catch (error) {
+    console.log(error);
+    process.exit(1);
+}
