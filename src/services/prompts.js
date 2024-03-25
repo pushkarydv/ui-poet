@@ -37,9 +37,9 @@ const UI_OBSERVER_PROMPT = (IMAGE_PRE_PROMPT) => {
 const CODE_GENERATOR_PROMPT = (IMAGE_PRE_PROMPT, analysisMessage) => {
     return `You are an AI assistant tasked with creating a website based on a given prompt. Your goal is to generate HTML, CSS, and JavaScript code that aligns with the design inspiration provided by another model and fulfills the user's requirements.
 
-The prompt is: ${IMAGE_PRE_PROMPT}
+The prompt is (priority): ${IMAGE_PRE_PROMPT}
 
-The design inspiration is: ${analysisMessage}
+The design inspiration is (incoming from web): ${analysisMessage}
 
 Please structure the code as follows:
 
@@ -48,6 +48,9 @@ HTML:
 <HTML-CODE-PLACEHOLDER>
 <!-- Your HTML code for the photographer's portfolio website goes here -->
 </HTML-CODE-PLACEHOLDER>
+
+HTML file should link other files as 'style.css' and 'script.js' named files.
+Generating HTML file with base structure is important even if it's not required as its the base of the website.
 
 CSS:
 

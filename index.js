@@ -19,7 +19,7 @@ const { fileToGenerativePart } = require("./src/services/fileToGenerativePart");
 const { UI_OBSERVER_PROMPT, CODE_GENERATOR_PROMPT } = require("./src/services/prompts");
 
 async function main() {
-
+    
     logger(`
     UI-POET
     Developed by Pushkar Yadav (https://github.com/pushkarydv)
@@ -32,7 +32,6 @@ async function main() {
         console.log('No prompt provided');
         process.exit(1);
     }
-    console.log(`User: ${task}\n`);
 
     logger(`Getting Some Inspiration images`);
     const inspirationImages = await getInspirationalImages(task);
@@ -79,10 +78,12 @@ async function main() {
     const _css = filterText(generatedCode, 'CSS-CODE-PLACEHOLDER');
     const _js = filterText(generatedCode, 'JS-CODE-PLACEHOLDER');
 
+    makeFile('./output/index.html', _html);
+    makeFile('./output/style.css', _css);
+    makeFile('./output/script.js', _js);
 
-    makeFile('index.html', _html);
-    makeFile('style.css', _css);
-    makeFile('script.js', _js);
+    logger(`Thanks for using UI-POET, your code has been generated and saved in output folder. \n\nHappy Coding!`);
+    process.exit(0);
 }
 
 main();
