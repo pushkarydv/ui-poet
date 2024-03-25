@@ -11,6 +11,8 @@ require('dotenv').config();
 const Groq = require("groq-sdk");
 const OpenAI = require("openai");
 
+const { exec } = require('child_process');
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const { makeFile } = require('./src/utils/filesystem');
@@ -49,6 +51,7 @@ async function main() {
 
     logger(`Vision Model Initiated`);
     const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    /* VISION MODEL TO UNDERSTAND UI */
     const visionModel = gemini.getGenerativeModel({ model: "gemini-pro-vision" });
     const prompt = UI_OBSERVER_PROMPT(task);
 
@@ -62,33 +65,36 @@ async function main() {
 
     logger(`Analyzed, Starting to generate code`);
     const codeUserPrompt = CODE_GENERATOR_PROMPT(task, ANALYSIS_MESSAGE);
-    // const groqCloud = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    // const completion = await groqCloud.chat.completions.create({
-    //     messages: [
-    //         {
-    //             role: 'user',
-    //             content: codeUserPrompt,
-    //         },
-    //     ],
-    //     model: 'mixtral-8x7b-32768',
+
+    /* AI MODEL TO GENERATE CODE (CAN BE REPLACED WITH ANY) */
+    const groqCloud = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const completion = await groqCloud.chat.completions.create({
+        messages: [
+            {
+                role: 'user',
+                content: codeUserPrompt,
+            },
+        ],
+        model: 'mixtral-8x7b-32768',
+    });
+
+    // const openai = new OpenAI({
+    //     apiKey: process.env.OPENAI_API_KEY,
     // });
 
-    const openai = new OpenAI({
-        apiKey: process.env.OPENAI_API_KEY,
-    });
+    // const completion = await openai.chat.completions.create({
+    //     messages: [{ role: 'user', content: codeUserPrompt }],
+    //     model: 'gpt-4-turbo-preview',
+    // });
 
-    const completion = await openai.chat.completions.create({
-        messages: [{ role: 'user', content: codeUserPrompt }],
-        model: 'gpt-4-turbo-preview',
-    });
-
+ 
     const generatedCode = await completion.choices[0]?.message?.content || '';
 
     if (!generatedCode) {
         logger(`Failed to generate code`);
         process.exit(1);
     }
-    console.log(generatedCode);
+    // console.log(generatedCode);
     logger(`Filtering Code`);
     const _html = filterText(generatedCode, 'HTML-LAYER');
     const _css = filterText(generatedCode, 'CSS-LAYER');
@@ -99,6 +105,11 @@ async function main() {
     makeFile('./output/script.js', _js);
 
     logger(`Thanks for using UI-POET, your code has been generated and saved in output folder. \n\nHappy Coding!`);
+
+    // Next Few lines are mean to open index.html by at own, even if they don't work, the code will be generated and saved in output folder.
+
+    const command = process.platform === 'win32' ? 'start output/index.html' : 'open ./output/index.html';
+    exec(command);
 
 }
 
