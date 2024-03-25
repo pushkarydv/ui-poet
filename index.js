@@ -102,9 +102,4 @@ async function main() {
 
 }
 
-try {
-    main();
-} catch (error) {
-    console.log(error);
-    process.exit(1);
-}
+main();
