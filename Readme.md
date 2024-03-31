@@ -19,7 +19,7 @@ Before running UI-POET, make sure you have the following prerequisites installed
 
 ## Some basic tests
 
-As this is just base version of UI-POET it's intended to generate whole code but here are a few tests been done in which it was provided a simple and 5-6 word prompt to generate ui
+As this is just the base version of UI-POET, it's designed to generate complete code. However, it has also been tested with simple 5-6 word prompts to effortlessly generate stunning UI designs without any manual intervention.
 
 1. Generate a chatbot that looks like apple's
     ![Screenshot 2024-03-31 182941](https://github.com/pushkarydv/ui-poet/assets/96358784/e5c573b1-3bda-4c15-bc46-9721bc684af4)
@@ -41,8 +41,9 @@ As this is just base version of UI-POET it's intended to generate whole code but
 
 2. Create a `.env` file in the root directory and add the API keys from `.env.sample` file.
 
+3. As of now the model selected is Claude, you can change the model in `src/index.js` file. (a few are commented out you can uncomment them to use them)
 
-3. Run the following command to start the application:
+4. Run the following command to start the application:
 
     ```bash
     npm start
