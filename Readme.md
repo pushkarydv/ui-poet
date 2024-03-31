@@ -17,6 +17,10 @@ Before running UI-POET, make sure you have the following prerequisites installed
 - Node.js
 - npm (Node Package Manager)
 
+## Demo Video
+
+https://github.com/pushkarydv/ui-poet/assets/96358784/2fc05fb7-5652-4851-b347-b718a403a037
+
 ## Some basic tests
 
 As this is just the base version of UI-POET, it's designed to generate complete code. However, it has also been tested with simple 5-6 word prompts to effortlessly generate stunning UI designs without any manual intervention.
@@ -33,9 +37,7 @@ As this is just the base version of UI-POET, it's designed to generate complete 
 
     ```bash
     git clone https://github.com/pushkarydv/UI-POET.git
-
     cd UI-POET
-
     npm install
     ```
 
