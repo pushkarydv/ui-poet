@@ -1,10 +1,17 @@
-/*
-    * this function takes a URL of image file and returns a generative part object with the file data encoded in base64.
-*/
+/**
+ * This file contains the implementation of a function that takes a URL of an image file and returns a generative part object with the file data encoded in base64.
+ */
 
 const https = require('https');
 const mime = require('mime-types');
 const url = require('url');
+
+/**
+ * Converts an image file to a generative part object with the file data encoded in base64.
+ * @param {string} urlString - The URL of the image file.
+ * @returns {Promise<Object>} A promise that resolves to a generative part object with the file data encoded in base64.
+ * @throws {Error} If there is an error while converting the file.
+ */
 
 async function fileToGenerativePart(urlString) {
   const parsedUrl = url.parse(urlString);
@@ -35,7 +42,5 @@ async function fileToGenerativePart(urlString) {
     });
   });
 }
-
-
 
 module.exports = { fileToGenerativePart };

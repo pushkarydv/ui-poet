@@ -1,6 +1,14 @@
-/*
-   * this function will web scrap and get a few images from dribble.com for ai to process and know about the design trends.
-*/
+/**
+ * This file contains a function that web scrapes and retrieves a few images from dribbble.com.
+ * The purpose of this function is to provide design trends for AI to process.
+ * 
+ * Retrieves a specified number of inspirational images from dribbble.com based on a prompt.
+ * 
+ * @param {string} prompt - The prompt to search for on dribbble.com.
+ * @param {number} [noOfImages=5] - The number of images to retrieve (default is 5).
+ * @param {string} [resize='1280x720'] - The desired size of the images (default is '1280x720').
+ * @returns {Promise<string[]>} - A promise that resolves to an array of image URLs.
+ */
 
 const puppeteer = require("puppeteer");
 
@@ -27,7 +35,7 @@ const getInspirationalImages = async (prompt, noOfImages = 5, resize = '1280x720
         const resizedUrl = `${url.protocol}//${url.host}${path}/${filename}?resize=${resize}`;
         return resizedUrl;
       })
-      .filter(url => url !== null); 
+      .filter(url => url !== null);
   }, noOfImages, resize);
 
   await browser.close();
