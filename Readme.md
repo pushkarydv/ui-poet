@@ -43,7 +43,7 @@ As this is just the base version of UI-POET, it's designed to generate complete 
 
 2. Create a `.env` file in the root directory and add the API keys from `.env.sample` file.
 
-3. As of now the model selected is Claude, you can change the model in `src/index.js` file. (a few are commented out you can uncomment them to use them)
+3. As of now the model selected is Claude(As it was also trained on XML data, so it's easier to get structured output from it and extract through regx), you can change the model in `src/index.js` file. (a few are commented out you can uncomment them to use them)
 
 4. Run the following command to start the application:
 
